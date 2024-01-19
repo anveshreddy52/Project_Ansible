@@ -1,1 +1,5 @@
-
+- name: executing the roles from this file
+  hosts: testing_group
+  become: yes
+  roles:
+    - file
