@@ -1,1 +1,63 @@
+---
+# tasks file for file
+# Tasks to be executed on the remote hosts
 
+    - name: Updating the update cache
+      apt:
+        update_cache: yes
+      notify: Start the Nginx Service
+      tags: update 
+
+    - name: Install Nginx 
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create a Directory
+      ansible.builtin.file:
+        path: /anvesh
+        state: directory
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Create a file
+      ansible.builtin.file:
+        path: /anvesh/"{{ file_name }}"
+        state: touch
+        owner: root
+        group: root
+        mode: '0622'
+
+    - name: Change file owner and file permissions
+      ansible.builtin.file:
+        path: /anvesh/abc.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Delete a file
+      ansible.builtin.file:
+        path: /opt/def.html
+        state: absent
+
+    - name: Delete a directory
+      ansible.builtin.file:
+        path: /opt/"{{ folder_name }}"
+        state: absent
+
+    - name: Copy a file from source to remote systems
+      ansible.builtin.copy:
+        src: /anvesh/abc.html
+        dest: /opt/abc.html
+        owner: root
+        group: root
+        mode: '0655'
+      tags: copy
+
+    - name: Git Checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/anveshreddy52/Project_Ansible.git'
+        dest: /opt/Project_Ansible.git
+        version: "{{ branch_name }}"
+      tags: gitcheckout
